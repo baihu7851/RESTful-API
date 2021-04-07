@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Model.ViewModel;
+using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.ApiController.Controllers
@@ -23,10 +23,10 @@ namespace RESTfulAPI.ApiController.Controllers
         }
 
         // GET: api/<UserController>
-        [HttpGet("All", Name = "s")]
-        public ActionResult<User> Get()
+        [HttpGet("All")]
+        public IEnumerable<User> Get()
         {
-            return Ok(_user.Users());
+            return _user.Users();
         }
 
         // GET api/<UserController>/5
