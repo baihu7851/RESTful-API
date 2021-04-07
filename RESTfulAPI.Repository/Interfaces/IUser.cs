@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using RESTfulAPI.Model.Models;
+using RESTfulAPI.Model.ViewModel;
 
 namespace RESTfulAPI.Repository.Interfaces
 {

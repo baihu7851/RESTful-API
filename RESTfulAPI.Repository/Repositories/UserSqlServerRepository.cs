@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Security.Policy;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
-using RESTfulAPI.Model.Models;
+using RESTfulAPI.Model.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.Repository.Repositories
