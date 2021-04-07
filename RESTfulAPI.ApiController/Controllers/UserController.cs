@@ -14,10 +14,12 @@ namespace RESTfulAPI.ApiController.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUser _user;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUser userRepository)
+        public UserController(IUser userRepository, ILogger<UserController> logger)
         {
             _user = userRepository;
+            _logger = logger;
         }
 
         // GET: api/<UserController>
@@ -33,12 +35,9 @@ namespace RESTfulAPI.ApiController.Controllers
         {
             User user = _user.User(id);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
+            if (user != null) return Ok(user);
+            _logger.LogError("使用者 ID 錯誤");
+            return NotFound();
         }
 
         // POST api/<UserController>
@@ -62,6 +61,7 @@ namespace RESTfulAPI.ApiController.Controllers
         public ActionResult<User> Delete(IEnumerable<int> id)
         {
             _user.Delete(id);
+            _logger.LogError($"使用者 {id} 被刪除");
             return Ok();
         }
     }
