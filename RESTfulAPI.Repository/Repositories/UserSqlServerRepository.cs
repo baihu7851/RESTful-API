@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
@@ -13,23 +9,21 @@ namespace RESTfulAPI.Repository.Repositories
 {
     public class UserSqlServerRepository : IUser
     {
-        public UserSqlServerRepository(IConfiguration configuration)
+        public UserSqlServerRepository(IConfiguration configuration, IDb db)
         {
             Configuration = configuration;
-
-            Connection = new SqlConnection(configuration.GetConnectionString("SqlServer"));
+            Connection = db.GetDb();
         }
 
         public IConfiguration Configuration { get; }
-
         public IDbConnection Connection { get; }
 
-        public void Add(IEnumerable<User> user)
+        public void Add(IEnumerable<User> users)
         {
             const string strSql = "INSERT INTO [Users] (UserName, Birthday, Email, Phone) VALUES (@UserName, @Birthday, @Email, @Phone)";
-            foreach (var i in user)
+            foreach (var user in users)
             {
-                Connection.ExecuteScalar<User>(strSql, i);
+                Connection.ExecuteScalar<User>(strSql, user);
             }
         }
 
@@ -42,12 +36,12 @@ namespace RESTfulAPI.Repository.Repositories
             }
         }
 
-        public void Update(IEnumerable<User> user)
+        public void Update(IEnumerable<User> users)
         {
             const string strSql = "UPDATE  [Users] SET UserName = @UserName, Birthday = @Birthday, Email = @Email, Phone = @Phone WHERE (Id = @Id)";
-            foreach (var i in user)
+            foreach (var user in users)
             {
-                Connection.ExecuteScalar<User>(strSql, i);
+                Connection.ExecuteScalar<User>(strSql, user);
             }
         }
 
