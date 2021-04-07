@@ -13,10 +13,11 @@ namespace RESTfulAPI.Repository.Repositories
 {
     public class UserSqlServerRepository : IUser
     {
-        public UserSqlServerRepository(IConfiguration configuration, IDbConnection connection)
+        public UserSqlServerRepository(IConfiguration configuration)
         {
             Configuration = configuration;
-            Connection = connection;
+
+            Connection = new SqlConnection(configuration.GetConnectionString("SqlServer"));
         }
 
         public IConfiguration Configuration { get; }
