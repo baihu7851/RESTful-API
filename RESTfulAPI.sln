@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.Model", "RESTfulAPI.Model\RESTfulAPI.Model.csproj", "{849194DA-4C1A-4618-8EFB-6F9F32ED90A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RESTfulAPI.Model", "RESTfulAPI.Model\RESTfulAPI.Model.csproj", "{849194DA-4C1A-4618-8EFB-6F9F32ED90A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.Repository", "RESTfulAPI.Repository\RESTfulAPI.Repository.csproj", "{47458DA5-39AC-4F39-8E55-9C21B7C13CE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.ApiController", "RESTfulAPI.ApiController\RESTfulAPI.ApiController.csproj", "{CE10B8E4-243F-494F-8ED3-B37F1AED6236}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{849194DA-4C1A-4618-8EFB-6F9F32ED90A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{849194DA-4C1A-4618-8EFB-6F9F32ED90A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{849194DA-4C1A-4618-8EFB-6F9F32ED90A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47458DA5-39AC-4F39-8E55-9C21B7C13CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47458DA5-39AC-4F39-8E55-9C21B7C13CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47458DA5-39AC-4F39-8E55-9C21B7C13CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47458DA5-39AC-4F39-8E55-9C21B7C13CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE10B8E4-243F-494F-8ED3-B37F1AED6236}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE10B8E4-243F-494F-8ED3-B37F1AED6236}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE10B8E4-243F-494F-8ED3-B37F1AED6236}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE10B8E4-243F-494F-8ED3-B37F1AED6236}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
