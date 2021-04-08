@@ -10,7 +10,6 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
 using RESTfulAPI.Repository.Repositories;
-using RiskFirst.Hateoas;
 
 namespace RESTfulAPI.ApiController
 {

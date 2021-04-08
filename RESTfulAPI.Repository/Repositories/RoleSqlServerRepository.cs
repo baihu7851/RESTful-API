@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
 
@@ -11,13 +9,11 @@ namespace RESTfulAPI.Repository.Repositories
 {
     public class RoleSqlServerRepository : IRoleInterface
     {
-        public RoleSqlServerRepository(IConfiguration configuration, IDbInterface db)
+        public RoleSqlServerRepository(IDbInterface db)
         {
-            Configuration = configuration;
             Connection = db.GetDb();
         }
 
-        public IConfiguration Configuration { get; }
         public IDbConnection Connection { get; }
 
         public void Add<T>(List<T> roles)

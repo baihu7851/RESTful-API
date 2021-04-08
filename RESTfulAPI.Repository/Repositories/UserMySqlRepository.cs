@@ -2,7 +2,6 @@
 using System.Data;
 using System.Linq;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
 
@@ -10,13 +9,11 @@ namespace RESTfulAPI.Repository.Repositories
 {
     public class UserMySqlRepository : IUserInterface
     {
-        public UserMySqlRepository(IConfiguration configuration, IDbInterface db)
+        public UserMySqlRepository(IDbInterface db)
         {
-            Configuration = configuration;
             Connection = db.GetDb();
         }
 
-        public IConfiguration Configuration { get; }
         public IDbConnection Connection { get; }
 
         public void Add<T>(List<T> users)
