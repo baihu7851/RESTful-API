@@ -16,6 +16,7 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
 using RESTfulAPI.Repository.Repositories;
+using RiskFirst.Hateoas;
 
 namespace RESTfulAPI.ApiController
 {
@@ -48,9 +49,20 @@ namespace RESTfulAPI.ApiController
 
             #endregion Migrations
 
-            // 注入DB
+            // 注入 DB
             services.AddSingleton<IDb, Db>();
+            // 注入資料介面
             services.AddSingleton<IUser, UserSqlServerRepository>();
+            // 注入 Links
+            services.AddLinks(config =>
+            {
+                config.AddPolicy<User>(policy =>
+                {
+                    policy.RequireSelfLink()
+                        .RequireRoutedLink("user", "GetUserRoute", x => new { id = x.Id })
+                        .RequireRoutedLink("delete", "DeleteUserRoute", x => new { id = x.Id });
+                });
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
