@@ -44,9 +44,9 @@ namespace RESTfulAPI.ApiController
             #endregion Migrations
 
             // 注入 DB
-            services.AddSingleton<IDb, Db>();
+            services.AddSingleton<IDbInterface, Db>();
             // 注入資料介面
-            services.AddSingleton<IUser, UserSqlServerRepository>();
+            services.AddSingleton<IDataInterface, UserSqlServerRepository>();
             // 注入 Links
             services.AddLinks(config =>
             {

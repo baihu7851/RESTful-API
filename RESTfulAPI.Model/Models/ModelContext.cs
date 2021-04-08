@@ -9,5 +9,6 @@ namespace RESTfulAPI.Model.Models
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Role> RoleUser { get; set; }
     }
 }

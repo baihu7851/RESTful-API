@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RESTfulAPI.Middleware.ViewModel
 {
@@ -10,8 +6,16 @@ namespace RESTfulAPI.Middleware.ViewModel
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public DateTime? Birthday { get; set; }
+        private DateTime? Birthday { get; set; }
+
+        public string birthday
+        {
+            get => Birthday?.ToString("yyyy-MM-dd");
+            set => Birthday = Convert.ToDateTime(value);
+        }
+
         public string Email { get; set; }
         public string Phone { get; set; }
+        public Link Links { get; set; }
     }
 }
