@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Model.ViewModel;
+using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
-using RiskFirst.Hateoas;
 
 namespace RESTfulAPI.ApiController.Controllers
 {
@@ -13,13 +12,11 @@ namespace RESTfulAPI.ApiController.Controllers
     {
         private readonly IUser _user;
         private readonly ILogger<UserController> _logger;
-        private readonly ILinksService _linksService;
 
-        public UserController(IUser userRepository, ILogger<UserController> logger, ILinksService linksService)
+        public UserController(IUser userRepository, ILogger<UserController> logger)
         {
             _user = userRepository;
             _logger = logger;
-            _linksService = linksService;
         }
 
         // GET: api/<UserController>
@@ -37,7 +34,6 @@ namespace RESTfulAPI.ApiController.Controllers
 
             if (user != null)
             {
-                _linksService.AddLinksAsync(user);
                 return Ok(user);
             }
             _logger.LogError("使用者 ID 錯誤");

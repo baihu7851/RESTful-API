@@ -1,8 +1,8 @@
-﻿using System;
+﻿using RESTfulAPI.Model.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using RESTfulAPI.Model.Models;
 
 namespace RESTfulAPI.Repository.Interfaces
 {

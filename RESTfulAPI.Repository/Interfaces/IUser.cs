@@ -1,8 +1,5 @@
-﻿using System;
+﻿using RESTfulAPI.Middleware.ViewModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RESTfulAPI.Model.ViewModel;
 
 namespace RESTfulAPI.Repository.Interfaces
 {

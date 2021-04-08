@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using RiskFirst.Hateoas.Models;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace RESTfulAPI.Model.ViewModel
+namespace RESTfulAPI.Middleware.ViewModel
 {
-    public class User : LinkContainer
+    public class User
     {
         public int Id { get; set; }
         public string UserName { get; set; }
