@@ -2,7 +2,7 @@
 
 namespace RESTfulAPI.Repository.Interfaces
 {
-    public interface IDataInterface
+    public interface ICRUDInterface
     {
         List<T> View<T>();
 

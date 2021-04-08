@@ -26,37 +26,32 @@ namespace RESTfulAPI.ApiController
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // 注入 DB
+            services.AddSingleton<IDbInterface, Db>();
+
             #region Migrations
 
             switch (Environment.GetEnvironmentVariable("Database"))
             {
                 case "SqlServer":
                     services.AddDbContext<ModelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
+                    // 注入資料介面
+                    services.AddSingleton<IUserInterface, UserSqlServerRepository>();
+                    services.AddSingleton<IRoleInterface, RoleSqlServerRepository>();
                     break;
 
                 case "MySql":
                     services.AddDbContext<ModelContext>(options => options.UseMySql(Configuration.GetConnectionString("MySql"),
+
                         new MySqlServerVersion(new Version(8, 0, 23)),
                         mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)));
+                    // 注入資料介面
+                    services.AddSingleton<IUserInterface, UserMySqlRepository>();
+                    services.AddSingleton<IRoleInterface, RoleMySqlRepository>();
                     break;
             }
 
             #endregion Migrations
-
-            // 注入 DB
-            services.AddSingleton<IDbInterface, Db>();
-            // 注入資料介面
-            services.AddSingleton<IDataInterface, UserSqlServerRepository>();
-            // 注入 Links
-            services.AddLinks(config =>
-            {
-                config.AddPolicy<User>(policy =>
-                {
-                    policy.RequireSelfLink()
-                        .RequireRoutedLink("user", "GetUserRoute", x => new { id = x.Id })
-                        .RequireRoutedLink("delete", "DeleteUserRoute", x => new { id = x.Id });
-                });
-            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
