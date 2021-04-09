@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Model.ViewModel;
+using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.ApiController.Controllers
@@ -13,12 +10,12 @@ namespace RESTfulAPI.ApiController.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUser _user;
+        private readonly IUserInterface _user;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUser userRepository, ILogger<UserController> logger)
+        public UserController(IUserInterface userInterface, ILogger<UserController> logger)
         {
-            _user = userRepository;
+            _user = userInterface;
             _logger = logger;
         }
 
@@ -26,15 +23,14 @@ namespace RESTfulAPI.ApiController.Controllers
         [HttpGet("All")]
         public ActionResult<User> Get()
         {
-            return Ok(_user.Users());
+            return Ok(_user.View<User>());
         }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
         public ActionResult<User> Get(int id)
         {
-            User user = _user.User(id);
-
+            var user = _user.View<User>(id);
             if (user != null) return Ok(user);
             _logger.LogError("使用者 ID 錯誤");
             return NotFound();
@@ -42,27 +38,27 @@ namespace RESTfulAPI.ApiController.Controllers
 
         // POST api/<UserController>
         [HttpPost("Add")]
-        public ActionResult<User> Post(IEnumerable<User> user)
+        public ActionResult<User> Post(List<User> user)
         {
             _user.Add(user);
-            return Ok("新增使用者成功");
+            return CreatedAtAction(nameof(Post), user);
         }
 
         // PUT api/<UserController>/5
         [HttpPut("Update")]
-        public ActionResult<User> Put(IEnumerable<User> user)
+        public ActionResult<User> Put(List<User> user)
         {
             _user.Update(user);
-            return Ok("更新使用者成功");
+            return NoContent();
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("Delete")]
-        public ActionResult<User> Delete(IEnumerable<int> id)
+        public ActionResult<User> Delete(List<int> id)
         {
             _user.Delete(id);
             _logger.LogError($"使用者 {id} 被刪除");
-            return Ok();
+            return NoContent();
         }
     }
 }

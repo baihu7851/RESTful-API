@@ -7,9 +7,9 @@ using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.Repository.Repositories
 {
-    public class UserSqlServerRepository : IUserInterface
+    public class UserMySqlRepository : IUserInterface
     {
-        public UserSqlServerRepository(IDbInterface db)
+        public UserMySqlRepository(IDbInterface db)
         {
             Connection = db.GetDb();
         }
@@ -18,7 +18,7 @@ namespace RESTfulAPI.Repository.Repositories
 
         public void Add<T>(List<T> users)
         {
-            const string strSql = "INSERT INTO [Users] (UserName, Birthday, Email, Phone) VALUES (@UserName, @Birthday, @Email, @Phone)";
+            const string strSql = "INSERT INTO `Users` (UserName, Birthday, Email, Phone) VALUES (@UserName, @Birthday, @Email, @Phone)";
             foreach (var user in users)
             {
                 Connection.ExecuteScalar<User>(strSql, user);
@@ -27,7 +27,7 @@ namespace RESTfulAPI.Repository.Repositories
 
         public void Delete<T>(List<T> id)
         {
-            const string strSql = "DELETE FROM [Users] WHERE (Id = @Id)";
+            const string strSql = "DELETE FROM `Users` WHERE (Id = @Id)";
             foreach (var i in id)
             {
                 Connection.ExecuteScalar<User>(strSql, new { Id = i });
@@ -36,7 +36,7 @@ namespace RESTfulAPI.Repository.Repositories
 
         public void Update<T>(List<T> users)
         {
-            const string strSql = "UPDATE [Users] SET UserName = @UserName, Birthday = @Birthday, Email = @Email, Phone = @Phone WHERE (Id = @Id)";
+            const string strSql = "UPDATE `Users` SET UserName = @UserName, Birthday = @Birthday, Email = @Email, Phone = @Phone WHERE (Id = @Id)";
             foreach (var user in users)
             {
                 Connection.ExecuteScalar<User>(strSql, user);
@@ -45,7 +45,7 @@ namespace RESTfulAPI.Repository.Repositories
 
         public T View<T>(int id)
         {
-            const string strSql = "SELECT * FROM [Users] WHERE (Users.Id = @Id)";
+            const string strSql = "SELECT * FROM `Users` WHERE (Users.Id = @Id)";
             return Connection.QueryFirstOrDefault<T>(strSql, new
             {
                 Id = id
@@ -54,7 +54,7 @@ namespace RESTfulAPI.Repository.Repositories
 
         public List<T> View<T>()
         {
-            const string strSql = "SELECT * FROM [Users]";
+            const string strSql = "SELECT * FROM `Users`";
             return Connection.Query<T>(strSql).ToList();
         }
     }

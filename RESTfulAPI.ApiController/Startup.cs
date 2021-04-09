@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using RESTfulAPI.Model.Models;
@@ -31,26 +25,33 @@ namespace RESTfulAPI.ApiController
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // 注入 DB
+            services.AddSingleton<IDbInterface, Db>();
+
             #region Migrations
 
             switch (Environment.GetEnvironmentVariable("Database"))
             {
                 case "SqlServer":
                     services.AddDbContext<ModelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
+                    // 注入資料介面
+                    services.AddSingleton<IUserInterface, UserSqlServerRepository>();
+                    services.AddSingleton<IRoleInterface, RoleSqlServerRepository>();
+                    services.AddSingleton<IRoleUserInterface, RoleUserSqlServerRepository>();
                     break;
 
                 case "MySql":
                     services.AddDbContext<ModelContext>(options => options.UseMySql(Configuration.GetConnectionString("MySql"),
+
                         new MySqlServerVersion(new Version(8, 0, 23)),
                         mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)));
+                    // 注入資料介面
+                    services.AddSingleton<IUserInterface, UserMySqlRepository>();
+                    services.AddSingleton<IRoleInterface, RoleMySqlRepository>();
                     break;
             }
 
             #endregion Migrations
-
-            // 注入DB
-            services.AddSingleton<IDb, Db>();
-            services.AddSingleton<IUser, UserSqlServerRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

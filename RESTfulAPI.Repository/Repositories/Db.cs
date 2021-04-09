@@ -7,7 +7,7 @@ using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.Repository.Repositories
 {
-    public class Db : IDb
+    public class Db : IDbInterface
     {
         public Db(IConfiguration configuration)
         {
