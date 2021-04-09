@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace RESTfulAPI.Middleware.ViewModel
 {
-    public class RoleUser
+    public class UserDate
     {
-        public int RoleId { get; set; }
-        public string RoleName { get; set; }
-        public List<UserDate> UserDates { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
     }
 }

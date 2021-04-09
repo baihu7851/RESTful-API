@@ -2,7 +2,7 @@
 using System.Data;
 using System.Linq;
 using Dapper;
-using RESTfulAPI.Middleware.ViewModel;
+using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.Repository.Repositories

@@ -37,6 +37,7 @@ namespace RESTfulAPI.ApiController
                     // 注入資料介面
                     services.AddSingleton<IUserInterface, UserSqlServerRepository>();
                     services.AddSingleton<IRoleInterface, RoleSqlServerRepository>();
+                    services.AddSingleton<IRoleUserInterface, RoleUserSqlServerRepository>();
                     break;
 
                 case "MySql":

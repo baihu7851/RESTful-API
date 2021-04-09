@@ -13,9 +13,9 @@ namespace RESTfulAPI.ApiController.Controllers
         private readonly IRoleInterface _role;
         private readonly ILogger<RoleController> _logger;
 
-        public RoleController(IRoleInterface dataInterface, ILogger<RoleController> logger)
+        public RoleController(IRoleInterface roleInterface, ILogger<RoleController> logger)
         {
-            _role = dataInterface;
+            _role = roleInterface;
             _logger = logger;
         }
 

@@ -13,9 +13,9 @@ namespace RESTfulAPI.ApiController.Controllers
         private readonly IUserInterface _user;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserInterface icrudInterface, ILogger<UserController> logger)
+        public UserController(IUserInterface userInterface, ILogger<UserController> logger)
         {
-            _user = icrudInterface;
+            _user = userInterface;
             _logger = logger;
         }
 

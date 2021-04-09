@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RESTfulAPI.Middleware.ViewModel;
 
 namespace RESTfulAPI.Repository.Interfaces
 {
     public interface IRoleUserInterface
     {
-        List<T> View<T>();
+        List<RoleUser> View();
 
-        T View<T>(int roleId);
+        RoleUser View(int roleId);
 
         void Add<T>(int roleId, List<T> userId);
 
-        void Update<T>(List<T> data);
+        void Update<T>(int roleId, List<T> usersId);
 
-        void Delete<T>(List<T> roleId);
+        void Delete<T>(int roleId, List<T> usersId);
     }
 }
