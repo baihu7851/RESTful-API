@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using RESTfulAPI.Model.Models;
 
-namespace RESTfulAPI.Model.Migrations
+namespace RESTfulAPI.Models.Migrations
 {
     [DbContext(typeof(ModelContext))]
     partial class ModelContextModelSnapshot : ModelSnapshot

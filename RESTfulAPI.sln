@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RESTfulAPI.ApiController", "RESTfulAPI.ApiController\RESTfulAPI.ApiController.csproj", "{CE10B8E4-243F-494F-8ED3-B37F1AED6236}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.Middleware", "RESTfulAPI.Middleware\RESTfulAPI.Middleware.csproj", "{96FD5373-BE97-42B4-BBFB-910760A597E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RESTfulAPI.Middleware", "RESTfulAPI.Middleware\RESTfulAPI.Middleware.csproj", "{96FD5373-BE97-42B4-BBFB-910760A597E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.Model", "RESTfulAPI.Model\RESTfulAPI.Model.csproj", "{A94A1639-E34D-49FE-8ADA-FF5B9755A696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RESTfulAPI.Model", "RESTfulAPI.Model\RESTfulAPI.Model.csproj", "{A94A1639-E34D-49FE-8ADA-FF5B9755A696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.Repository", "RESTfulAPI.Repository\RESTfulAPI.Repository.csproj", "{8054E245-A3E1-4B26-AB84-001F8244D52A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RESTfulAPI.Repository", "RESTfulAPI.Repository\RESTfulAPI.Repository.csproj", "{8054E245-A3E1-4B26-AB84-001F8244D52A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTfulAPI.ViewModel", "RESTfulAPI.ViewModel\RESTfulAPI.ViewModel.csproj", "{0071A1E8-9201-49FA-BB83-B97F571DB6C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8054E245-A3E1-4B26-AB84-001F8244D52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8054E245-A3E1-4B26-AB84-001F8244D52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8054E245-A3E1-4B26-AB84-001F8244D52A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0071A1E8-9201-49FA-BB83-B97F571DB6C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0071A1E8-9201-49FA-BB83-B97F571DB6C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0071A1E8-9201-49FA-BB83-B97F571DB6C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0071A1E8-9201-49FA-BB83-B97F571DB6C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

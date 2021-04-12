@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RESTfulAPI.Middleware.ViewModel;
+﻿using System.Collections.Generic;
 
 namespace RESTfulAPI.Repository.Interfaces
 {
     public interface IRoleUserInterface
     {
-        List<RoleUser> View();
+        List<T> View<T>();
 
-        RoleUser View(int roleId);
+        T View<T>(int id);
 
-        void Add<T>(int roleId, List<T> userId);
+        void Add<T>(int id, List<T> data);
 
-        void Update<T>(int roleId, List<T> usersId);
+        void Update<T>(int id, List<T> data);
 
-        void Delete<T>(int roleId, List<T> usersId);
+        void Delete<T>(int id, List<T> data);
     }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
+using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.ApiController.Controllers
 {
@@ -12,26 +14,44 @@ namespace RESTfulAPI.ApiController.Controllers
     {
         private readonly IUserInterface _user;
         private readonly ILogger<UserController> _logger;
+        private readonly IMemoryCache _cache;
 
-        public UserController(IUserInterface userInterface, ILogger<UserController> logger)
+        public UserController(IUserInterface userInterface, ILogger<UserController> logger, IMemoryCache cache)
         {
             _user = userInterface;
             _logger = logger;
+            _cache = cache;
         }
 
         // GET: api/<UserController>
-        [HttpGet("All")]
+        [HttpGet("All", Name = "GetUsers")]
         public ActionResult<User> Get()
         {
-            return Ok(_user.View<User>());
+            if (!_cache.TryGetValue("GetUserAll", out List<User> users))
+            {
+                users = _user.View<User>();
+                var cacheTime = DateTimeOffset.Now.AddHours(1);
+                _cache.Set("GetUserAll", users, cacheTime);
+            }
+            return Ok(users);
         }
 
         // GET api/<UserController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetUser")]
         public ActionResult<User> Get(int id)
         {
-            var user = _user.View<User>(id);
-            if (user != null) return Ok(user);
+            if (!_cache.TryGetValue($"User{id}", out User user))
+            {
+                GetUser(id);
+                user = GetUser.View<User>(id);
+                var cacheTime = DateTimeOffset.Now.AddHours(1);
+                _cache.Set("UserAll", user, cacheTime);
+            }
+
+            if (user != null)
+            {
+                return Ok(user);
+            }
             _logger.LogError("使用者 ID 錯誤");
             return NotFound();
         }
@@ -60,5 +80,25 @@ namespace RESTfulAPI.ApiController.Controllers
             _logger.LogError($"使用者 {id} 被刪除");
             return NoContent();
         }
+
+        //private User CreateLinksForUser(User user)
+        //{
+        //    user.Links.Add(
+        //        new Link(Url.Link(nameof(Get), new { id = user.Id })));
+
+        //    user.Links.Add(
+        //        new Link(
+        //            href: _urlHelper.Link("UpdateVehicle", new { id = user.Id })));
+
+        //    user.Links.Add(
+        //        new Link(
+        //            href: _urlHelper.Link("PartiallyUpdateVehicle", new { id = user.Id })));
+
+        //    user.Links.Add(
+        //        new Link(
+        //            href: _urlHelper.Link("DeleteVehicle", new { id = user.Id })));
+
+        //    return user;
+        //}
     }
 }

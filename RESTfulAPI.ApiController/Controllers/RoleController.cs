@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
+using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.ApiController.Controllers
 {

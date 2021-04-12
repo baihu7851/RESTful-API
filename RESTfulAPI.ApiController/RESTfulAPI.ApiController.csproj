@@ -12,6 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RESTfulAPI.Repository\RESTfulAPI.Repository.csproj" />
+	  <ProjectReference Include="..\RESTfulAPI.Middleware\RESTfulAPI.Middleware.csproj" />
 	</ItemGroup>
 </Project>

@@ -5,7 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
@@ -27,6 +31,8 @@ namespace RESTfulAPI.ApiController
         {
             // ª`¤J DB
             services.AddSingleton<IDbInterface, Db>();
+            services.AddMemoryCache();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             #region Migrations
 

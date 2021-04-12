@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RESTfulAPI.Model.Models;
+using RESTfulAPI.Models.Models;
 
-namespace RESTfulAPI.Model.Migrations
+namespace RESTfulAPI.Models.Migrations
 {
     [DbContext(typeof(ModelContext))]
     [Migration("20210407031748_NewModel")]

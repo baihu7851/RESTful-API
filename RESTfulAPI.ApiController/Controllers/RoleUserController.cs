@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Middleware.ViewModel;
 using RESTfulAPI.Repository.Interfaces;
+using RESTfulAPI.ViewModel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,35 +28,34 @@ namespace RESTfulAPI.ApiController.Controllers
         [HttpGet("All")]
         public ActionResult<RoleUser> Get()
         {
-            return Ok(_roleUser.View());
+            return Ok(_roleUser);
         }
 
         // GET api/<RoleUserController>/5
         [HttpGet("{roleId}")]
         public ActionResult<User> Get(int roleId)
         {
-            var roleUser = _roleUser.View(roleId);
+            var roleUser = _roleUser;
             if (roleUser != null) return Ok(roleUser);
             _logger.LogError("使用者 ID 錯誤");
             return NotFound();
         }
 
         // POST api/<RoleUserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("Add")]
+        public ActionResult Post(int roleId, List<int> usersId)
         {
-        }
-
-        // PUT api/<RoleUserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            _roleUser.Add(roleId, usersId);
+            return Ok();
         }
 
         // DELETE api/<RoleUserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public ActionResult Delete(int roleId, List<int> usersId)
         {
+            _roleUser.Delete(roleId, usersId);
+            _logger.LogError($"角色 {roleId} 刪除 {usersId}");
+            return NoContent();
         }
     }
 }

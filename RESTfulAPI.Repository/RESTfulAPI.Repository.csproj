@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RESTfulAPI.Middleware\RESTfulAPI.Middleware.csproj" />
+    <ProjectReference Include="..\RESTfulAPI.Model\RESTfulAPI.Model.csproj" />
   </ItemGroup>
 
 </Project>
