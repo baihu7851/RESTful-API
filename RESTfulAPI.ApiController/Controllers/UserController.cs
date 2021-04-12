@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.Repository.Interfaces;
 using RESTfulAPI.ViewModel;
 
@@ -12,11 +13,11 @@ namespace RESTfulAPI.ApiController.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserInterface _user;
+        private readonly IUser _user;
         private readonly ILogger<UserController> _logger;
         private readonly IMemoryCache _cache;
 
-        public UserController(IUserInterface userInterface, ILogger<UserController> logger, IMemoryCache cache)
+        public UserController(IUser userInterface, ILogger<UserController> logger, IMemoryCache cache)
         {
             _user = userInterface;
             _logger = logger;
@@ -29,7 +30,7 @@ namespace RESTfulAPI.ApiController.Controllers
         {
             if (!_cache.TryGetValue("GetUserAll", out List<User> users))
             {
-                users = _user.View<User>();
+                users = _user.GetUsers();
                 var cacheTime = DateTimeOffset.Now.AddHours(1);
                 _cache.Set("GetUserAll", users, cacheTime);
             }
@@ -42,8 +43,7 @@ namespace RESTfulAPI.ApiController.Controllers
         {
             if (!_cache.TryGetValue($"User{id}", out User user))
             {
-                GetUser(id);
-                user = GetUser.View<User>(id);
+                user = _user.GetUser(id);
                 var cacheTime = DateTimeOffset.Now.AddHours(1);
                 _cache.Set("UserAll", user, cacheTime);
             }
@@ -60,45 +60,30 @@ namespace RESTfulAPI.ApiController.Controllers
         [HttpPost("Add")]
         public ActionResult<User> Post(List<User> user)
         {
-            _user.Add(user);
-            return CreatedAtAction(nameof(Post), user);
+            //_user.Add(user);
+            //return CreatedAtAction(nameof(Post), user);
+            return null;
+ 
         }
 
         // PUT api/<UserController>/5
         [HttpPut("Update")]
         public ActionResult<User> Put(List<User> user)
         {
-            _user.Update(user);
-            return NoContent();
+            //_user.Update(user);
+            //return NoContent();
+            return null;
+
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("Delete")]
         public ActionResult<User> Delete(List<int> id)
         {
-            _user.Delete(id);
-            _logger.LogError($"使用者 {id} 被刪除");
-            return NoContent();
+            //_user.Delete(id);
+            //_logger.LogError($"使用者 {id} 被刪除");
+            //return NoContent();
+            return null;
         }
-
-        //private User CreateLinksForUser(User user)
-        //{
-        //    user.Links.Add(
-        //        new Link(Url.Link(nameof(Get), new { id = user.Id })));
-
-        //    user.Links.Add(
-        //        new Link(
-        //            href: _urlHelper.Link("UpdateVehicle", new { id = user.Id })));
-
-        //    user.Links.Add(
-        //        new Link(
-        //            href: _urlHelper.Link("PartiallyUpdateVehicle", new { id = user.Id })));
-
-        //    user.Links.Add(
-        //        new Link(
-        //            href: _urlHelper.Link("DeleteVehicle", new { id = user.Id })));
-
-        //    return user;
-        //}
     }
 }
