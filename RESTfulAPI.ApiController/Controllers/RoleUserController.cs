@@ -7,8 +7,6 @@ using Microsoft.Extensions.Logging;
 using RESTfulAPI.Repository.Interfaces;
 using RESTfulAPI.ViewModel;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace RESTfulAPI.ApiController.Controllers
 {
     [Route("api/[controller]")]
@@ -26,14 +24,14 @@ namespace RESTfulAPI.ApiController.Controllers
 
         // GET: api/<RoleUserController>
         [HttpGet("All")]
-        public ActionResult<RoleUser> Get()
+        public ActionResult<ViewRoleUser> Get()
         {
             return Ok(_roleUser);
         }
 
         // GET api/<RoleUserController>/5
         [HttpGet("{roleId}")]
-        public ActionResult<User> Get(int roleId)
+        public ActionResult<ViewUser> Get(int roleId)
         {
             var roleUser = _roleUser;
             if (roleUser != null) return Ok(roleUser);

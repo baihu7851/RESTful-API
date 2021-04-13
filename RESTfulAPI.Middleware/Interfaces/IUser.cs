@@ -1,11 +1,18 @@
 ﻿using System.Collections.Generic;
+using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.Middleware.Interfaces
 {
     public interface IUser
     {
-        public List<ViewModel.User> GetUsers();
-        public ViewModel.User GetUser(int id);
-        //public List<ViewModel.User> PostUser(List<ViewModel.User> user);
+        public List<ViewUser> GetUsers();
+
+        public ViewUser GetUser(int id);
+
+        public void AddUser(List<ViewUser> users);
+
+        public void UpdateUser(List<ViewUser> users);
+
+        public void DeleteUser(List<int> id);
     }
 }

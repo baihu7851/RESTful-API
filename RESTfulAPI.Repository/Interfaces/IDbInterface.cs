@@ -4,6 +4,6 @@ namespace RESTfulAPI.Repository.Interfaces
 {
     public interface IDbInterface
     {
-        IDbConnection GetDb();
+        public IDbConnection GetDb();
     }
 }

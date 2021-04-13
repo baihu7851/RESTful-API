@@ -16,40 +16,28 @@ namespace RESTfulAPI.Repository.Repositories
 
         public IDbConnection Connection { get; }
 
-        public void Add<T>(List<T> users)
+        public void Add<T>(T user)
         {
             const string strSql = "INSERT INTO [Users] (UserName, Birthday, Email, Phone) VALUES (@UserName, @Birthday, @Email, @Phone)";
-            foreach (var user in users)
-            {
-                Connection.ExecuteScalar<User>(strSql, user);
-            }
+            Connection.ExecuteScalar<User>(strSql, user);
         }
 
-        public void Delete<T>(List<T> id)
+        public void Delete<T>(T id)
         {
             const string strSql = "DELETE FROM [Users] WHERE (Id = @Id)";
-            foreach (var i in id)
-            {
-                Connection.ExecuteScalar<User>(strSql, new { Id = i });
-            }
+            Connection.ExecuteScalar<User>(strSql, new { Id = id });
         }
 
-        public void Update<T>(List<T> users)
+        public void Update<T>(T user)
         {
             const string strSql = "UPDATE [Users] SET UserName = @UserName, Birthday = @Birthday, Email = @Email, Phone = @Phone WHERE (Id = @Id)";
-            foreach (var user in users)
-            {
-                Connection.ExecuteScalar<User>(strSql, user);
-            }
+            Connection.ExecuteScalar<User>(strSql, user);
         }
 
         public T View<T>(int id)
         {
             const string strSql = "SELECT * FROM [Users] WHERE (Users.Id = @Id)";
-            return Connection.QueryFirstOrDefault<T>(strSql, new
-            {
-                Id = id
-            });
+            return Connection.QueryFirstOrDefault<T>(strSql, new { Id = id });
         }
 
         public List<T> View<T>()

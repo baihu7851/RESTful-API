@@ -15,31 +15,22 @@ namespace RESTfulAPI.Repository.Repositories
 
         public IDbConnection Connection { get; }
 
-        public void Add<T>(int roleId, List<T> usersId)
+        public void Add<T>(int roleId, T userId)
         {
             const string strSql = "INSERT INTO [RoleUser] (RolesId, UsersId) VALUES  (@RolesId, @UsersId)";
-            foreach (var userId in usersId)
-            {
-                Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
-            }
+            Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
         }
 
-        public void Delete<T>(int roleId, List<T> usersId)
+        public void Delete<T>(int roleId, T userId)
         {
             const string strSql = "DELETE FROM [RoleUser] WHERE (UsersId = @UsersId) AND (RolesId = @RolesId)";
-            foreach (var userId in usersId)
-            {
-                Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
-            }
+            Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
         }
 
-        public void Update<T>(int roleId, List<T> usersId)
+        public void Update<T>(int roleId, T userId)
         {
             const string strSql = "UPDATE [RoleUser] SET UsersId = @UsersId WHERE (RolesId = @RolesId)";
-            foreach (var userId in usersId)
-            {
-                Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
-            }
+            Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
         }
 
         public List<T> View<T>()

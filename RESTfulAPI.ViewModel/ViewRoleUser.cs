@@ -1,10 +1,10 @@
 ﻿namespace RESTfulAPI.ViewModel
 
 {
-    public class RoleUser
+    public class ViewRoleUser
     {
         public int RoleId { get; set; }
         public string RoleName { get; set; }
-        //public List<User> Users { get; set; }
+        //public List<ViewUser> Users { get; set; }
     }
 }

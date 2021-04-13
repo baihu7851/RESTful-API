@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using RESTfulAPI.Repository.Interfaces;
+using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.ApiController.Controllers
@@ -10,53 +12,69 @@ namespace RESTfulAPI.ApiController.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
-        private readonly IRoleInterface _role;
+        private readonly IRole _role;
         private readonly ILogger<RoleController> _logger;
+        private readonly IMemoryCache _cache;
 
-        public RoleController(IRoleInterface roleInterface, ILogger<RoleController> logger)
+        public RoleController(IRole role, ILogger<RoleController> logger, IMemoryCache cache)
         {
-            _role = roleInterface;
+            _role = role;
             _logger = logger;
+            _cache = cache;
         }
 
         // GET: api/<RoleController>
         [HttpGet("All")]
-        public ActionResult<Role> Get()
+        public ActionResult<ViewRole> Get()
         {
-            return Ok(_role.View<Role>());
+            if (!_cache.TryGetValue("GetRoleAll", out List<ViewRole> roles))
+            {
+                roles = _role.GetRoles();
+                var cacheTime = DateTimeOffset.Now.AddHours(1);
+                _cache.Set("GetRoleAll", roles, cacheTime);
+            }
+            return Ok(roles);
         }
 
         // GET api/<RoleController>/5
         [HttpGet("{id}")]
-        public ActionResult<Role> Get(int id)
+        public ActionResult<ViewRole> Get(int id)
         {
-            var role = _role.View<Role>(id);
-            if (role != null) return Ok(role);
+            if (!_cache.TryGetValue($"GetRole{id}", out ViewRole role))
+            {
+                role = _role.GetRole(id);
+                var cacheTime = DateTimeOffset.Now.AddHours(1);
+                _cache.Set($"GetRole{id}", role, cacheTime);
+            }
+            if (role != null)
+            {
+                return Ok(role);
+            }
             _logger.LogError("角色 ID 錯誤");
             return NotFound();
         }
 
         // POST api/<RoleController>
         [HttpPost("Add")]
-        public ActionResult<Role> Post(List<Role> role)
+        public ActionResult<ViewRole> Post(List<ViewRole> roles)
         {
-            _role.Add(role);
-            return CreatedAtAction(nameof(Post), role);
+            _role.AddRole(roles);
+            return CreatedAtAction(nameof(Post), roles);
         }
 
         // PUT api/<RoleController>/5
         [HttpPut("Update")]
-        public ActionResult<Role> Put(List<Role> role)
+        public ActionResult<ViewRole> Put(List<ViewRole> roles)
         {
-            _role.Update(role);
+            _role.UpdateRole(roles);
             return NoContent();
         }
 
         // DELETE api/<RoleController>/5
         [HttpDelete("Delete")]
-        public ActionResult<Role> Delete(List<int> id)
+        public ActionResult<ViewRole> Delete(List<int> id)
         {
-            _role.Delete(id);
+            _role.DeleteRole(id);
             _logger.LogError($"角色 {id} 被刪除");
             return NoContent();
         }

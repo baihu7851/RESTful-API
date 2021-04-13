@@ -1,10 +1,10 @@
 ﻿namespace RESTfulAPI.ViewModel
 {
-    public class Link
+    public class ViewLink
     {
         public string Href { get; set; }
 
-        public Link(string href)
+        public ViewLink(string href)
         {
             Href = href;
         }

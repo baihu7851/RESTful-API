@@ -3,7 +3,7 @@
 namespace RESTfulAPI.ViewModel
 
 {
-    public class User
+    public class ViewUser
     {
         public int Id { get; set; }
         public string UserName { get; set; }

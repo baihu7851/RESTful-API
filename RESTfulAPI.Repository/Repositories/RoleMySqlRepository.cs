@@ -16,31 +16,22 @@ namespace RESTfulAPI.Repository.Repositories
 
         public IDbConnection Connection { get; }
 
-        public void Add<T>(List<T> roles)
+        public void Add<T>(T role)
         {
             const string strSql = "INSERT INTO `Roles` (RoleName) VALUES (@RoleName)";
-            foreach (var role in roles)
-            {
-                Connection.ExecuteScalar<Role>(strSql, role);
-            }
+            Connection.ExecuteScalar<Role>(strSql, role);
         }
 
-        public void Delete<T>(List<T> id)
+        public void Delete<T>(T id)
         {
             const string strSql = "DELETE FROM `Roles` WHERE (Id = @Id)";
-            foreach (var i in id)
-            {
-                Connection.ExecuteScalar<Role>(strSql, new { Id = i });
-            }
+            Connection.ExecuteScalar<Role>(strSql, new { Id = id });
         }
 
-        public void Update<T>(List<T> roles)
+        public void Update<T>(T role)
         {
             const string strSql = "UPDATE `Roles` SET RoleName = @RoleName WHERE (Id = @Id)";
-            foreach (var role in roles)
-            {
-                Connection.ExecuteScalar<Role>(strSql, role);
-            }
+            Connection.ExecuteScalar<Role>(strSql, role);
         }
 
         public T View<T>(int id)
