@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Dapper;
-using RESTfulAPI.Middleware.ViewModel;
+using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
 
 namespace RESTfulAPI.Repository.Repositories
@@ -16,96 +15,40 @@ namespace RESTfulAPI.Repository.Repositories
 
         public IDbConnection Connection { get; }
 
-        public void Add<T>(int roleId, List<T> usersId)
+        public void Add(RoleUser roleUser)
         {
-            const string strSql = "INSERT INTO [RoleUser] (RolesId, UsersId) VALUES  (@RolesId, @UsersId)";
-            foreach (var userId in usersId)
-            {
-                Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
-            }
+            const string strSql = "INSERT INTO [RoleUser] (RolesId, UsersId) VALUES (@RolesId, @UsersId)";
+            Connection.ExecuteScalar<RoleUser>(strSql, roleUser);
         }
 
-        public void Delete<T>(int roleId, List<T> usersId)
+        public void Delete(RoleUser roleUser)
         {
             const string strSql = "DELETE FROM [RoleUser] WHERE (UsersId = @UsersId) AND (RolesId = @RolesId)";
-            foreach (var userId in usersId)
-            {
-                Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
-            }
+            Connection.ExecuteScalar<RoleUser>(strSql, roleUser);
         }
 
-        public void Update<T>(int roleId, List<T> usersId)
+        public void Update(RoleUser roleUser)
         {
-            const string strSql = "UPDATE [RoleUser] SET UsersId = @UsersId WHERE (RolesId = @RolesId)";
-            foreach (var userId in usersId)
-            {
-                Connection.ExecuteScalar<RoleUser>(strSql, new { RolesId = roleId, UsersId = userId });
-            }
+            const string strSql = "UPDATE [RoleUser] SET UsersId = @UsersId WHERE (UsersId = @UsersId) AND (RolesId = @RolesId)";
+            Connection.ExecuteScalar<RoleUser>(strSql, new { roleUser });
         }
 
-        public List<RoleUser> View()
-        {
-            List<RoleUser> roleUsers = new List<RoleUser>();
-            foreach (var roleId in GetRoleId())
-            {
-                RoleUser roleUser = GetRoleData(roleId);
-                foreach (var userId in GetUserId(roleId))
-                {
-                    roleUser.UserDates ??= new List<UserDate>();
-                    roleUser.UserDates.Add(GetUseData(userId));
-                }
-                roleUsers.Add(roleUser);
-            }
-
-            return roleUsers;
-        }
-
-        public RoleUser View(int roleId)
-        {
-            RoleUser roleUser = GetRoleData(roleId);
-            foreach (var userId in GetUserId(roleId))
-            {
-                roleUser.UserDates ??= new List<UserDate>();
-                roleUser.UserDates.Add(GetUseData(userId));
-            }
-            return roleUser;
-        }
-
-        #region 關聯
-
-        private IEnumerable<int> GetRoleId()
-        {
-            const string strSql = "SELECT DISTINCT RolesId FROM RoleUser";
-            return Connection.Query<int>(strSql).ToList();
-        }
-
-        private RoleUser GetRoleData(int roleId)
+        public List<RoleUser> GetUsers(int roleId)
         {
             const string strSql = @"
-                SELECT Id AS RoleId, RoleName
-                FROM [Roles]
-                WHERE (Id = @Id)";
-            return Connection.QueryFirstOrDefault<RoleUser>(strSql, new { Id = roleId });
-        }
-
-        public List<int> GetUserId(int roleId)
-        {
-            const string strSql = @"
-                SELECT DISTINCT [UsersId]
+                SELECT DISTINCT RolesId, UsersId
                 FROM [RoleUser]
-                WHERE ([RoleUser].RolesId = @RolesId)";
-            return Connection.Query<int>(strSql, new { RolesId = roleId }).ToList();
+                WHERE (RolesId = @RolesId)";
+            return (List<RoleUser>)Connection.Query<RoleUser>(strSql, new { RolesId = roleId });
         }
 
-        public UserDate GetUseData(int userId)
+        public List<RoleUser> GetRoles(int userId)
         {
             const string strSql = @"
-                SELECT Id AS UserId ,UserName
-                FROM [Users]
-                WHERE (Id = @Id)";
-            return Connection.QueryFirstOrDefault<UserDate>(strSql, new { Id = userId });
+                SELECT DISTINCT UsersId, RolesId
+                FROM [RoleUser]
+                WHERE (UsersId = @UsersId)";
+            return (List<RoleUser>)Connection.Query<RoleUser>(strSql, new { UsersId = userId });
         }
-
-        #endregion 關聯
     }
 }

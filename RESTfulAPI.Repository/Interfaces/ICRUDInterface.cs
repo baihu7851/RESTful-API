@@ -4,14 +4,14 @@ namespace RESTfulAPI.Repository.Interfaces
 {
     public interface ICRUDInterface
     {
-        List<T> View<T>();
+        public List<T> View<T>();
 
-        T View<T>(int id);
+        public T View<T>(int id);
 
-        void Add<T>(List<T> data);
+        public void Add<T>(T data);
 
-        void Update<T>(List<T> data);
+        public void Update<T>(T data);
 
-        void Delete<T>(List<T> id);
+        public void Delete<T>(T id);
     }
 }

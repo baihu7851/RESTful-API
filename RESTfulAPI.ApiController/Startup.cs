@@ -5,8 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using Autofac;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using RESTfulAPI.Middleware;
+using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
 using RESTfulAPI.Repository.Repositories;
@@ -25,8 +29,13 @@ namespace RESTfulAPI.ApiController
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // 注入 DB
+            // 注入共通資料
             services.AddSingleton<IDbInterface, Db>();
+            services.AddMemoryCache();
+            services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
+            services.AddTransient<IUser, UserMw>();
+            services.AddTransient<IRole, RoleMw>();
+            services.AddTransient<IRoleUser, RoleUserMw>();
 
             #region Migrations
 
@@ -34,10 +43,11 @@ namespace RESTfulAPI.ApiController
             {
                 case "SqlServer":
                     services.AddDbContext<ModelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
-                    // 注入資料介面
-                    services.AddSingleton<IUserInterface, UserSqlServerRepository>();
-                    services.AddSingleton<IRoleInterface, RoleSqlServerRepository>();
-                    services.AddSingleton<IRoleUserInterface, RoleUserSqlServerRepository>();
+                    // 注入 SqlServer 資料介面
+                    services.AddTransient<IUserInterface, UserSqlServerRepository>();
+                    services.AddTransient<IRoleInterface, RoleSqlServerRepository>();
+                    services.AddTransient<IRoleUserInterface, RoleUserSqlServerRepository>();
+
                     break;
 
                 case "MySql":
@@ -45,9 +55,10 @@ namespace RESTfulAPI.ApiController
 
                         new MySqlServerVersion(new Version(8, 0, 23)),
                         mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)));
-                    // 注入資料介面
+                    // 注入 MySql 資料介面
                     services.AddSingleton<IUserInterface, UserMySqlRepository>();
                     services.AddSingleton<IRoleInterface, RoleMySqlRepository>();
+                    services.AddTransient<IRoleUserInterface, RoleUserMySqlRepository>();
                     break;
             }
 
@@ -80,6 +91,18 @@ namespace RESTfulAPI.ApiController
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            //builder.RegisterModule<AutofacModule>();
+            //Assembly service = Assembly.Load("NetCoreDemo.Service");
+            //Assembly repository = Assembly.Load("NetCoreDemo.Repository");
+            //builder.RegisterAssemblyTypes(service, repository)
+            //    .Where(t => t.Name.EndsWith("Service"))
+            //    .AsImplementedInterfaces();
+            //builder.RegisterGeneric(typeof(ViewUser))
+            //    .As(typeof(IUser)).InstancePerDependency();
         }
     }
 }

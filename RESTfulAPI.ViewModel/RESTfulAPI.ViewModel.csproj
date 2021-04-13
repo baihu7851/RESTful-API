@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RESTfulAPI.ViewModel\RESTfulAPI.ViewModel.csproj" />
+    <ProjectReference Include="..\RESTfulAPI.Repository\RESTfulAPI.Repository.csproj" />
   </ItemGroup>
 
 </Project>
