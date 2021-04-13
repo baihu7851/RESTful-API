@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;

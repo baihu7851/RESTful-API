@@ -13,17 +13,19 @@ namespace RESTfulAPI.ApiController.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUser _user;
+        private readonly IRoleUser _roleUser;
         private readonly ILogger<UserController> _logger;
         private readonly IMemoryCache _cache;
 
-        public UserController(IUser userInterface, ILogger<UserController> logger, IMemoryCache cache)
+        public UserController(IUser user, IRoleUser roleUser, ILogger<UserController> logger, IMemoryCache cache)
         {
-            _user = userInterface;
+            _user = user;
+            _roleUser = roleUser;
             _logger = logger;
             _cache = cache;
         }
 
-        // GET: api/<UserController>
+        // GET: api/User/All
         [HttpGet("All", Name = "GetUsers")]
         public ActionResult<ViewUser> Get()
         {
@@ -36,7 +38,7 @@ namespace RESTfulAPI.ApiController.Controllers
             return Ok(users);
         }
 
-        // GET api/<UserController>/5
+        // GET api/User/5
         [HttpGet("{id}", Name = "GetUser")]
         public ActionResult<ViewUser> Get(int id)
         {
@@ -54,7 +56,7 @@ namespace RESTfulAPI.ApiController.Controllers
             return NotFound();
         }
 
-        // POST api/<UserController>
+        // POST api/User/Add
         [HttpPost("Add")]
         public ActionResult<ViewUser> Post(List<ViewUser> user)
         {
@@ -62,7 +64,7 @@ namespace RESTfulAPI.ApiController.Controllers
             return CreatedAtAction(nameof(Post), user);
         }
 
-        // PUT api/<UserController>/5
+        // PUT api/User/Update
         [HttpPut("Update")]
         public ActionResult<ViewUser> Put(List<ViewUser> user)
         {
@@ -70,12 +72,36 @@ namespace RESTfulAPI.ApiController.Controllers
             return NoContent();
         }
 
-        // DELETE api/<UserController>/5
+        // DELETE api/User/Delete
         [HttpDelete("Delete")]
         public ActionResult<ViewUser> Delete(List<int> id)
         {
             _user.DeleteUser(id);
             _logger.LogError($"使用者 {id} 被刪除");
+            return NoContent();
+        }
+
+        // GET api/User/Roles/5
+        [HttpGet("Roles/{userId}")]
+        public ActionResult<List<int>> GetRoleId(int userId)
+        {
+            return _roleUser.GetUserRole(userId);
+        }
+
+        // POST api/User/Roles/Add
+        [HttpPost("Roles/Add")]
+        public ActionResult Post(int userId, List<int> rolesId)
+        {
+            _roleUser.AddUserRole(userId, rolesId);
+            return Ok();
+        }
+
+        // DELETE api/User/Roles/Delete
+        [HttpDelete("Roles/Delete")]
+        public ActionResult Delete(int userId, List<int> rolesId)
+        {
+            _roleUser.DeleteUserRole(userId, rolesId);
+            _logger.LogError($"角色 {userId} 刪除 {rolesId}");
             return NoContent();
         }
     }

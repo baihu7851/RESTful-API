@@ -13,17 +13,19 @@ namespace RESTfulAPI.ApiController.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IRole _role;
+        private readonly IRoleUser _roleUser;
         private readonly ILogger<RoleController> _logger;
         private readonly IMemoryCache _cache;
 
-        public RoleController(IRole role, ILogger<RoleController> logger, IMemoryCache cache)
+        public RoleController(IRole role, IRoleUser roleUser, ILogger<RoleController> logger, IMemoryCache cache)
         {
             _role = role;
+            _roleUser = roleUser;
             _logger = logger;
             _cache = cache;
         }
 
-        // GET: api/<RoleController>
+        // GET: api/Role/All
         [HttpGet("All")]
         public ActionResult<ViewRole> Get()
         {
@@ -36,7 +38,7 @@ namespace RESTfulAPI.ApiController.Controllers
             return Ok(roles);
         }
 
-        // GET api/<RoleController>/5
+        // GET api/Role/5
         [HttpGet("{id}")]
         public ActionResult<ViewRole> Get(int id)
         {
@@ -54,7 +56,7 @@ namespace RESTfulAPI.ApiController.Controllers
             return NotFound();
         }
 
-        // POST api/<RoleController>
+        // POST api/Role/Add
         [HttpPost("Add")]
         public ActionResult<ViewRole> Post(List<ViewRole> roles)
         {
@@ -62,7 +64,7 @@ namespace RESTfulAPI.ApiController.Controllers
             return CreatedAtAction(nameof(Post), roles);
         }
 
-        // PUT api/<RoleController>/5
+        // PUT api/Role/Update
         [HttpPut("Update")]
         public ActionResult<ViewRole> Put(List<ViewRole> roles)
         {
@@ -70,12 +72,36 @@ namespace RESTfulAPI.ApiController.Controllers
             return NoContent();
         }
 
-        // DELETE api/<RoleController>/5
+        // DELETE api/Role/Delete
         [HttpDelete("Delete")]
         public ActionResult<ViewRole> Delete(List<int> id)
         {
             _role.DeleteRole(id);
             _logger.LogError($"角色 {id} 被刪除");
+            return NoContent();
+        }
+
+        // GET api/Role/Users/5
+        [HttpGet("Users/{roleId}")]
+        public ActionResult<List<int>> GetUserId(int roleId)
+        {
+            return _roleUser.GetRoleUser(roleId);
+        }
+
+        // POST api/Role/Users/Add
+        [HttpPost("Users/Add")]
+        public ActionResult Post(int roleId, List<int> usersId)
+        {
+            _roleUser.AddRoleUser(roleId, usersId);
+            return Ok();
+        }
+
+        // DELETE api/Role/Users/Delete
+        [HttpDelete("Users/Delete")]
+        public ActionResult Delete(int roleId, List<int> usersId)
+        {
+            _roleUser.DeleteRoleUser(roleId, usersId);
+            _logger.LogError($"角色 {roleId} 刪除 {usersId}");
             return NoContent();
         }
     }

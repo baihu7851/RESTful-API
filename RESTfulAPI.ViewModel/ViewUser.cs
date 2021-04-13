@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RESTfulAPI.ViewModel
+﻿namespace RESTfulAPI.ViewModel
 
 {
     public class ViewUser

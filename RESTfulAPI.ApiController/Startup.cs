@@ -35,6 +35,7 @@ namespace RESTfulAPI.ApiController
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
             services.AddTransient<IUser, UserMw>();
             services.AddTransient<IRole, RoleMw>();
+            services.AddTransient<IRoleUser, RoleUserMw>();
 
             #region Migrations
 

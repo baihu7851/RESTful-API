@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using RESTfulAPI.Model.Models;
 
 namespace RESTfulAPI.Repository.Interfaces
 {
     public interface IRoleUserInterface
     {
-        public List<T> View<T>();
+        public List<RoleUser> GetUsers(int roleId);
 
-        public T View<T>(int id);
+        public List<RoleUser> GetRoles(int userId);
 
-        public void Add<T>(int id, T data);
+        public void Add(RoleUser roleUser);
 
-        public void Update<T>(int id, T data);
+        public void Update(RoleUser roleUser);
 
-        public void Delete<T>(int id, T data);
+        public void Delete(RoleUser roleUser);
     }
 }
