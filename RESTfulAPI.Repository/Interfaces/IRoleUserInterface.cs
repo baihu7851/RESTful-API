@@ -9,7 +9,7 @@ namespace RESTfulAPI.Repository.Interfaces
 
         public List<RoleUser> GetRoles(int userId);
 
-        public void Add(RoleUser roleUser);
+        public int Add(RoleUser roleUser);
 
         public void Update(RoleUser roleUser);
 

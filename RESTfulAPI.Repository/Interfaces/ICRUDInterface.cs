@@ -8,7 +8,7 @@ namespace RESTfulAPI.Repository.Interfaces
 
         public T View<T>(int id);
 
-        public void Add<T>(T data);
+        public int Add<T>(T data);
 
         public void Update<T>(T data);
 
