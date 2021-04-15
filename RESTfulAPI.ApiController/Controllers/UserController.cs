@@ -1,108 +1,59 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.ApiController.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/User")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUser _user;
-        private readonly IRoleUser _roleUser;
-        private readonly ILogger<UserController> _logger;
-        private readonly IMemoryCache _cache;
 
-        public UserController(IUser user, IRoleUser roleUser, ILogger<UserController> logger, IMemoryCache cache)
+        public UserController(IUser user)
         {
             _user = user;
-            _roleUser = roleUser;
-            _logger = logger;
-            _cache = cache;
         }
 
         // GET: api/User/All
-        [HttpGet("All", Name = "GetUsers")]
-        public ActionResult<ViewUser> Get()
+        [HttpGet("All", Name = nameof(GetAll))]
+        public ActionResult GetAll()
         {
-            if (!_cache.TryGetValue("GetUserAll", out List<ViewUser> users))
-            {
-                users = _user.GetUsers();
-                var cacheTime = DateTimeOffset.Now.AddHours(1);
-                _cache.Set("GetUserAll", users, cacheTime);
-            }
-            return Ok(users);
+            var result = _user.GetUsers();
+            return Ok(result);
         }
 
         // GET api/User/5
-        [HttpGet("{id}", Name = "GetUser")]
-        public ActionResult<ViewUser> Get(int id)
+        [HttpGet("{id}", Name = nameof(Get))]
+        public ActionResult Get(int id)
         {
-            if (!_cache.TryGetValue($"GetUser{id}", out ViewUser user))
-            {
-                user = _user.GetUser(id);
-                var cacheTime = DateTimeOffset.Now.AddHours(1);
-                _cache.Set($"GetUser{id}", user, cacheTime);
-            }
-            if (user != null)
-            {
-                return Ok(user);
-            }
-            _logger.LogError("使用者 ID 錯誤");
-            return NotFound();
+            var result = _user.GetUser(id);
+            return result == null ? NotFound() : Ok(result);
         }
 
         // POST api/User/Add
-        [HttpPost("Add")]
+        [HttpPost("Add", Name = nameof(Post))]
         public ActionResult<ViewUser> Post(List<ViewUser> user)
         {
-            _user.AddUser(user);
-            return CreatedAtAction(nameof(Post), user);
+            var result = _user.AddUser(user);
+            return CreatedAtAction(nameof(Post), result);
         }
 
         // PUT api/User/Update
-        [HttpPut("Update")]
-        public ActionResult<ViewUser> Put(List<ViewUser> user)
+        [HttpPut("Update", Name = nameof(Put))]
+        public ActionResult Put(List<ViewUser> user)
         {
-            _user.UpdateUser(user);
-            return NoContent();
+            List<ViewUser> result = _user.UpdateUser(user);
+            return result == null ? NotFound() : Ok(result);
         }
 
         // DELETE api/User/Delete
-        [HttpDelete("Delete")]
-        public ActionResult<ViewUser> Delete(List<int> id)
+        [HttpDelete("Delete/{id}", Name = nameof(Delete))]
+        public ActionResult<ViewUser> Delete(int id)
         {
-            _user.DeleteUser(id);
-            _logger.LogError($"使用者 {id} 被刪除");
-            return NoContent();
-        }
-
-        // GET api/User/Roles/5
-        [HttpGet("Roles/{userId}")]
-        public ActionResult<List<int>> GetRoleId(int userId)
-        {
-            return _roleUser.GetUserRole(userId);
-        }
-
-        // POST api/User/Roles/Add
-        [HttpPost("Roles/Add")]
-        public ActionResult Post(int userId, List<int> rolesId)
-        {
-            _roleUser.AddUserRole(userId, rolesId);
-            return Ok();
-        }
-
-        // DELETE api/User/Roles/Delete
-        [HttpDelete("Roles/Delete")]
-        public ActionResult Delete(int userId, List<int> rolesId)
-        {
-            _roleUser.DeleteUserRole(userId, rolesId);
-            _logger.LogError($"角色 {userId} 刪除 {rolesId}");
-            return NoContent();
+            var result = _user.DeleteUser(id);
+            return result == null ? NotFound() : Ok(result);
         }
     }
 }

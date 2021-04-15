@@ -9,10 +9,10 @@ namespace RESTfulAPI.Middleware.Interfaces
 
         public ViewRole GetRole(int id);
 
-        public void AddRole(List<ViewRole> roles);
+        public List<ViewRole> AddRole(List<ViewRole> roles);
 
-        public void UpdateRole(List<ViewRole> roles);
+        public List<ViewRole> UpdateRole(List<ViewRole> roles);
 
-        public void DeleteRole(List<int> id);
+        public ViewRole DeleteRole(int id);
     }
 }

@@ -16,10 +16,10 @@ namespace RESTfulAPI.Repository.Repositories
 
         public IDbConnection Connection { get; }
 
-        public void Add<T>(T user)
+        public int Add<T>(T user)
         {
             const string strSql = "INSERT INTO `Users` (UserName, Birthday, Email, Phone) VALUES (@UserName, @Birthday, @Email, @Phone)";
-            Connection.ExecuteScalar<User>(strSql, user);
+            return Connection.ExecuteScalar<int>(strSql, user);
         }
 
         public void Delete<T>(T id)

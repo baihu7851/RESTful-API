@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
@@ -15,54 +16,92 @@ namespace RESTfulAPI.Middleware
             _role = role;
         }
 
-        public void AddRole(List<ViewRole> roles)
+        public List<ViewRole> GetRoles()
         {
-            foreach (var role in roles)
+            const string key = "Roles";
+            if (Cache.GetCache(key) == null)
             {
-                _role.Add(role);
+                List<ViewRole> roles = _role.View<Role>().Select(
+                    role => new ViewRole
+                    {
+                        Id = role.Id,
+                        RoleName = role.RoleName,
+                    }).ToList();
+                Cache.SetCache(key, roles);
             }
-        }
-
-        public void DeleteRole(List<int> id)
-        {
-            foreach (var i in id)
-            {
-                _role.Delete(i);
-            }
+            List<ViewRole> result = (List<ViewRole>)Cache.GetCache(key);
+            return result;
         }
 
         public ViewRole GetRole(int id)
         {
-            Role roleData = _role.View<Role>(id);
-            ViewRole role = new ViewRole()
+            string key = $"Role{id}";
+            if (Cache.GetCache(key) == null)
             {
-                Id = roleData.Id,
-                RoleName = roleData.RoleName,
-            };
+                ViewRole viewRole = new ViewRole();
+                Role role = _role.View<Role>(id);
+                if (role == null)
+                {
+                    return null;
+                }
+                viewRole.Id = role.Id;
+                viewRole.RoleName = role.RoleName;
+                Cache.SetCache(key, viewRole);
+            }
+            ViewRole result = (ViewRole)Cache.GetCache(key);
+            return result;
+        }
+
+        public List<ViewRole> AddRole(List<ViewRole> roles)
+        {
+            List<int> listId = new();
+            foreach (var role in roles)
+            {
+                if (VerifyRole(role) != null)
+                {
+                    var id = _role.Add(role);
+                    listId.Add(id);
+                    string key = $"Role{id}";
+                    Cache.RemoveCache(key);
+                }
+            }
+            List<ViewRole> result = listId.Select(GetRole).ToList();
+            return result;
+        }
+
+        public List<ViewRole> UpdateRole(List<ViewRole> roles)
+        {
+            List<int> listId = new();
+            foreach (var role in roles)
+            {
+                if (VerifyRole(role) != null)
+                {
+                    _role.Update(role);
+                    listId.Add(role.Id);
+                }
+                string key = $"Role{role.Id}";
+                Cache.SetCache(key, role);
+            }
+            List<ViewRole> result = listId.Select(GetRole).ToList();
+            return result;
+        }
+
+        public ViewRole DeleteRole(int id)
+        {
+            var role = GetRole(id);
+            if (role == null)
+            {
+                return null;
+            }
+            _role.Delete(id);
+            string key = $"Role{id}";
+            Cache.RemoveCache(key);
             return role;
         }
 
-        public List<ViewRole> GetRoles()
+        private object VerifyRole(ViewRole role)
         {
-            List<ViewRole> roles = new();
-            foreach (var role in _role.View<Role>())
-            {
-                var viewRole = new ViewRole
-                {
-                    Id = role.Id,
-                    RoleName = role.RoleName,
-                };
-                roles.Add(viewRole);
-            }
-            return roles;
-        }
-
-        public void UpdateRole(List<ViewRole> roles)
-        {
-            foreach (var role in roles)
-            {
-                _role.Update(role);
-            }
+            return string.IsNullOrWhiteSpace(role.RoleName) ? null : role;
         }
     }
 }

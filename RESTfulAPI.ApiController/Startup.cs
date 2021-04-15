@@ -5,8 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
-using Autofac;
+using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using RESTfulAPI.Middleware;
@@ -91,18 +93,6 @@ namespace RESTfulAPI.ApiController
             {
                 endpoints.MapControllers();
             });
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            //builder.RegisterModule<AutofacModule>();
-            //Assembly service = Assembly.Load("NetCoreDemo.Service");
-            //Assembly repository = Assembly.Load("NetCoreDemo.Repository");
-            //builder.RegisterAssemblyTypes(service, repository)
-            //    .Where(t => t.Name.EndsWith("Service"))
-            //    .AsImplementedInterfaces();
-            //builder.RegisterGeneric(typeof(ViewUser))
-            //    .As(typeof(IUser)).InstancePerDependency();
         }
     }
 }

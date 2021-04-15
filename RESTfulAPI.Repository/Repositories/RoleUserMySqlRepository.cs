@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Dapper;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
@@ -15,10 +16,10 @@ namespace RESTfulAPI.Repository.Repositories
             Connection = db.GetDb();
         }
 
-        public void Add(RoleUser role)
+        public int Add(RoleUser role)
         {
             const string strSql = "INSERT INTO `RoleUser` (RolesId, UsersId) VALUES (@RolesId, @UsersId)";
-            Connection.ExecuteScalar<RoleUser>(strSql, new { role });
+            return Connection.ExecuteScalar<int>(strSql, new { role });
         }
 
         public void Delete(RoleUser role)
@@ -39,7 +40,7 @@ namespace RESTfulAPI.Repository.Repositories
                 SELECT DISTINCT RolesId, UsersId
                 FROM `RoleUser`
                 WHERE (RolesId = @RolesId)";
-            return (List<RoleUser>)Connection.Query<RoleUser>(strSql, new { RolesId = roleId });
+            return Connection.Query<RoleUser>(strSql, new { RolesId = roleId }).ToList();
         }
 
         public List<RoleUser> GetRoles(int userId)
@@ -48,7 +49,7 @@ namespace RESTfulAPI.Repository.Repositories
                 SELECT DISTINCT UsersId, RolesId
                 FROM `RoleUser`
                 WHERE (UsersId = @UsersId)";
-            return (List<RoleUser>)Connection.Query<RoleUser>(strSql, new { UsersId = userId });
+            return Connection.Query<RoleUser>(strSql, new { UsersId = userId }).ToList();
         }
     }
 }
