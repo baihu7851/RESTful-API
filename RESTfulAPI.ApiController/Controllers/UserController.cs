@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.ViewModel;
@@ -19,68 +18,42 @@ namespace RESTfulAPI.ApiController.Controllers
 
         // GET: api/User/All
         [HttpGet("All", Name = nameof(GetAll))]
-        public ActionResult<ViewUser> GetAll()
+        public ActionResult GetAll()
         {
-            var users = _user.GetUsers();
-            var cacheTime = DateTimeOffset.Now.AddMinutes(1);
-
-            return Ok(users);
+            var result = _user.GetUsers();
+            return Ok(result);
         }
 
         // GET api/User/5
         [HttpGet("{id}", Name = nameof(Get))]
-        public ActionResult<object> Get(int id)
+        public ActionResult Get(int id)
         {
-            var user = _user.GetUser(id);
-            if (user == null) return NotFound();
-            return Ok(user);
+            var result = _user.GetUser(id);
+            return result == null ? NotFound() : Ok(result);
         }
 
         // POST api/User/Add
         [HttpPost("Add", Name = nameof(Post))]
         public ActionResult<ViewUser> Post(List<ViewUser> user)
         {
-            _user.AddUser(user);
-            return CreatedAtAction(nameof(Post), user);
+            var result = _user.AddUser(user);
+            return CreatedAtAction(nameof(Post), result);
         }
 
         // PUT api/User/Update
         [HttpPut("Update", Name = nameof(Put))]
-        public ActionResult<ViewUser> Put(List<ViewUser> user)
+        public ActionResult Put(List<ViewUser> user)
         {
-            //try
-            //{
-            _user.UpdateUser(user);
-            //var res = Get(user.id)
-            var res = new ViewUser();
-            return Ok(res);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw BadRequest(e.Message);
-            //}
+            List<ViewUser> result = _user.UpdateUser(user);
+            return result == null ? NotFound() : Ok(result);
         }
 
         // DELETE api/User/Delete
-        [HttpDelete("Delete", Name = nameof(Delete))]
-        public ActionResult<ViewUser> Delete(List<int> id)
+        [HttpDelete("Delete/{id}", Name = nameof(Delete))]
+        public ActionResult<ViewUser> Delete(int id)
         {
-            _user.DeleteUser(id);
-            return NoContent();
+            var result = _user.DeleteUser(id);
+            return result == null ? NotFound() : Ok(result);
         }
-
-        //private IEnumerable<ViewLink> CreateLinks(int? id, List<ViewUser> user, List<int?> listId, int? userId, List<int?> rolesId)
-        //{
-        //    var links = new List<ViewLink>
-        //    {
-        //        //new(Url.Link(nameof(GetAll), null)),
-        //        new(Url.Link(nameof(Get),  id )),
-        //        new(Url.Link(nameof(RoleController.Get), id)),
-        //        new(Url.Link(nameof(UserRoleController.Post),new {id=userId,rolesId})),
-        //        new(Url.Link(nameof(UserRoleController.Delete),new {id=userId,rolesId}))
-        //    };
-
-        //    return links;
-        //}
     }
 }

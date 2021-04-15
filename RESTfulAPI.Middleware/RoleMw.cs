@@ -48,23 +48,24 @@ namespace RESTfulAPI.Middleware
                 viewRole.RoleName = role.RoleName;
                 Cache.SetCache(key, viewRole);
             }
-
             ViewRole result = (ViewRole)Cache.GetCache(key);
             return result;
         }
 
         public List<ViewRole> AddRole(List<ViewRole> roles)
         {
-            //List<int> listId = new();
+            List<int> listId = new();
             foreach (var role in roles)
             {
                 if (VerifyRole(role) != null)
                 {
-                    _role.Add(role);
-                    //listId.Add(role.Id);
+                    var id = _role.Add(role);
+                    listId.Add(id);
+                    string key = $"Role{id}";
+                    Cache.RemoveCache(key);
                 }
             }
-            var result = roles;
+            List<ViewRole> result = listId.Select(GetRole).ToList();
             return result;
         }
 
@@ -78,6 +79,8 @@ namespace RESTfulAPI.Middleware
                     _role.Update(role);
                     listId.Add(role.Id);
                 }
+                string key = $"Role{role.Id}";
+                Cache.SetCache(key, role);
             }
             List<ViewRole> result = listId.Select(GetRole).ToList();
             return result;
@@ -91,6 +94,8 @@ namespace RESTfulAPI.Middleware
                 return null;
             }
             _role.Delete(id);
+            string key = $"Role{id}";
+            Cache.RemoveCache(key);
             return role;
         }
 

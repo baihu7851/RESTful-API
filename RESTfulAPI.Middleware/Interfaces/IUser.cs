@@ -9,10 +9,10 @@ namespace RESTfulAPI.Middleware.Interfaces
 
         public ViewUser GetUser(int id);
 
-        public void AddUser(List<ViewUser> users);
+        public List<ViewUser> AddUser(List<ViewUser> users);
 
-        public void UpdateUser(List<ViewUser> users);
+        public List<ViewUser> UpdateUser(List<ViewUser> users);
 
-        public void DeleteUser(List<int> id);
+        public ViewUser DeleteUser(int id);
     }
 }

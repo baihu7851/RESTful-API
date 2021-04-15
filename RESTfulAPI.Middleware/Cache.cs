@@ -1,31 +1,24 @@
-﻿using System;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace RESTfulAPI.Middleware
 {
     public class Cache
     {
-        public static object GetCache(string key, object cacheDate)
+        private static readonly MemoryCache MemoryCache = new(new MemoryCacheOptions());
+
+        public static void RemoveCache(string key)
         {
-            MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
-            if (cache.TryGetValue(key, out object result)) return result;
-            var cacheTime = DateTimeOffset.Now.AddHours(1);
-            cache.Set(key, cacheDate, cacheTime);
-            return result;
+            MemoryCache.Remove(key);
         }
 
-        public static object SetCache(string key, object cacheDate)
+        public static void SetCache(string key, object cacheDate)
         {
-            MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
-            cache.Set(key, cacheDate);
-            object result = GetCache(key);
-            return result;
+            MemoryCache.Set(key, cacheDate);
         }
 
         public static object GetCache(string key)
         {
-            MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
-            object result = cache.Get(key);
+            object result = MemoryCache.Get(key);
             return result;
         }
     }
