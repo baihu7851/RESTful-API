@@ -2,6 +2,7 @@
 using RESTfulAPI.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.ViewModel;
 
@@ -19,7 +20,7 @@ namespace RESTfulAPI.Middleware
         public List<ViewUser> GetUsers()
         {
             const string key = "Users";
-            if (Cache.GetCache(key) == null)
+            if (Cache.MyCache.Get(key) == null)
             {
                 List<ViewUser> users = _user.View<User>().Select(
                     user => new ViewUser
@@ -30,16 +31,16 @@ namespace RESTfulAPI.Middleware
                         Email = user.Email,
                         Phone = user.Phone,
                     }).ToList();
-                Cache.SetCache(key, users);
+                Cache.MyCache.Set(key, users);
             }
-            List<ViewUser> result = (List<ViewUser>)Cache.GetCache(key);
+            List<ViewUser> result = (List<ViewUser>)Cache.MyCache.Get(key);
             return result;
         }
 
         public ViewUser GetUser(int id)
         {
             string key = $"User{id}";
-            if (Cache.GetCache(key) == null)
+            if (Cache.MyCache.Get(key) == null)
             {
                 ViewUser viewRole = new ViewUser();
                 User user = _user.View<User>(id);
@@ -53,13 +54,13 @@ namespace RESTfulAPI.Middleware
                 viewRole.Birthday = user.Birthday?.ToString("yyyy-MM-dd");
                 viewRole.Email = user.Email;
                 viewRole.Phone = user.Phone;
-                Cache.SetCache(key, viewRole);
+                Cache.MyCache.Set(key, viewRole);
             }
             else
             {
             }
 
-            ViewUser result = (ViewUser)Cache.GetCache(key);
+            ViewUser result = (ViewUser)Cache.MyCache.Get(key);
             return result;
         }
 
@@ -73,7 +74,7 @@ namespace RESTfulAPI.Middleware
                     var id = _user.Add(user);
                     listId.Add(id);
                     string key = $"User{user.Id}";
-                    Cache.SetCache(key, user);
+                    Cache.MyCache.Set(key, user);
                 }
             }
             List<ViewUser> result = listId.Select(GetUser).ToList();
@@ -91,7 +92,7 @@ namespace RESTfulAPI.Middleware
                     listId.Add(user.Id);
                 }
                 string key = $"User{user.Id}";
-                Cache.SetCache(key, user);
+                Cache.MyCache.Set(key, user);
             }
             List<ViewUser> result = listId.Select(GetUser).ToList();
             return result;
@@ -106,7 +107,7 @@ namespace RESTfulAPI.Middleware
             }
             _user.Delete(id);
             string key = $"Role{id}";
-            Cache.RemoveCache(key);
+            Cache.MyCache.Remove(key);
             return user;
         }
 

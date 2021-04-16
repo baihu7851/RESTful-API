@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.Model.Models;
 using RESTfulAPI.Repository.Interfaces;
@@ -19,7 +20,7 @@ namespace RESTfulAPI.Middleware
         public List<ViewRole> GetRoles()
         {
             const string key = "Roles";
-            if (Cache.GetCache(key) == null)
+            if (Cache.MyCache.Get(key) == null)
             {
                 List<ViewRole> roles = _role.View<Role>().Select(
                     role => new ViewRole
@@ -27,16 +28,16 @@ namespace RESTfulAPI.Middleware
                         Id = role.Id,
                         RoleName = role.RoleName,
                     }).ToList();
-                Cache.SetCache(key, roles);
+                Cache.MyCache.Set(key, roles);
             }
-            List<ViewRole> result = (List<ViewRole>)Cache.GetCache(key);
+            List<ViewRole> result = (List<ViewRole>)Cache.MyCache.Get(key);
             return result;
         }
 
         public ViewRole GetRole(int id)
         {
             string key = $"Role{id}";
-            if (Cache.GetCache(key) == null)
+            if (Cache.MyCache.Get(key) == null)
             {
                 ViewRole viewRole = new ViewRole();
                 Role role = _role.View<Role>(id);
@@ -46,9 +47,9 @@ namespace RESTfulAPI.Middleware
                 }
                 viewRole.Id = role.Id;
                 viewRole.RoleName = role.RoleName;
-                Cache.SetCache(key, viewRole);
+                Cache.MyCache.Set(key, viewRole);
             }
-            ViewRole result = (ViewRole)Cache.GetCache(key);
+            ViewRole result = (ViewRole)Cache.MyCache.Get(key);
             return result;
         }
 
@@ -62,7 +63,7 @@ namespace RESTfulAPI.Middleware
                     var id = _role.Add(role);
                     listId.Add(id);
                     string key = $"Role{id}";
-                    Cache.RemoveCache(key);
+                    Cache.MyCache.Remove(key);
                 }
             }
             List<ViewRole> result = listId.Select(GetRole).ToList();
@@ -80,7 +81,7 @@ namespace RESTfulAPI.Middleware
                     listId.Add(role.Id);
                 }
                 string key = $"Role{role.Id}";
-                Cache.SetCache(key, role);
+                Cache.MyCache.Set(key, role);
             }
             List<ViewRole> result = listId.Select(GetRole).ToList();
             return result;
@@ -95,7 +96,7 @@ namespace RESTfulAPI.Middleware
             }
             _role.Delete(id);
             string key = $"Role{id}";
-            Cache.RemoveCache(key);
+            Cache.MyCache.Remove(key);
             return role;
         }
 
