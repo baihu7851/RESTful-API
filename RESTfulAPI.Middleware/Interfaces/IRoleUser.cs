@@ -1,19 +1,12 @@
 ﻿using System.Collections.Generic;
+using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.Middleware.Interfaces
 {
     public interface IRoleUser
     {
-        public List<int> GetRoleUser(int roleId);
+        public List<int> AddRoleUser(List<ViewRoleUser> viewRoleUsers);
 
-        public void AddRoleUser(int roleId, List<int> usersId);
-
-        public void DeleteRoleUser(int roleId, List<int> usersId);
-
-        public List<int> GetUserRole(int userId);
-
-        public void AddUserRole(int userId, List<int> rolesId);
-
-        public void DeleteUserRole(int userId, List<int> rolesId);
+        public List<int> DeleteRoleUser(List<ViewRoleUser> viewRoleUsers);
     }
 }

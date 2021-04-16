@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RESTfulAPI.Middleware.Interfaces;
 using RESTfulAPI.Repository.Interfaces;
+using RESTfulAPI.ViewModel;
 
 namespace RESTfulAPI.Middleware
 {
@@ -13,78 +15,32 @@ namespace RESTfulAPI.Middleware
             _roleUser = roleUser;
         }
 
-        public void AddRoleUser(int roleId, List<int> usersId)
+        public List<int> AddRoleUser(List<ViewRoleUser> viewRoleUsers)
         {
-            foreach (var userId in usersId)
+            foreach (var viewRole in viewRoleUsers)
             {
                 Model.Models.RoleUser result = new Model.Models.RoleUser
                 {
-                    RolesId = roleId,
-                    UsersId = userId
+                    RolesId = viewRole.RoleId,
+                    UsersId = viewRole.UserId
                 };
                 _roleUser.Add(result);
             }
+            return viewRoleUsers.Select(i => i.UserId).ToList();
         }
 
-        public void DeleteRoleUser(int roleId, List<int> usersId)
+        public List<int> DeleteRoleUser(List<ViewRoleUser> viewRoleUsers)
         {
-            foreach (var userId in usersId)
+            foreach (var viewRoleUser in viewRoleUsers)
             {
                 Model.Models.RoleUser result = new Model.Models.RoleUser
                 {
-                    RolesId = roleId,
-                    UsersId = userId
+                    RolesId = viewRoleUser.RoleId,
+                    UsersId = viewRoleUser.UserId
                 };
                 _roleUser.Delete(result);
             }
-        }
-
-        public List<int> GetRoleUser(int roleId)
-        {
-            var roleUsers = _roleUser.GetUsers(roleId);
-            List<int> userId = new();
-            foreach (var roleUser in roleUsers)
-            {
-                userId.Add(roleUser.UsersId);
-            }
-            return userId;
-        }
-
-        public void AddUserRole(int userId, List<int> rolesId)
-        {
-            foreach (var roleId in rolesId)
-            {
-                Model.Models.RoleUser result = new Model.Models.RoleUser
-                {
-                    RolesId = roleId,
-                    UsersId = userId
-                };
-                _roleUser.Add(result);
-            }
-        }
-
-        public void DeleteUserRole(int userId, List<int> rolesId)
-        {
-            foreach (var roleId in rolesId)
-            {
-                Model.Models.RoleUser result = new Model.Models.RoleUser
-                {
-                    RolesId = roleId,
-                    UsersId = userId
-                };
-                _roleUser.Delete(result);
-            }
-        }
-
-        public List<int> GetUserRole(int userId)
-        {
-            var userRoles = _roleUser.GetRoles(userId);
-            List<int> roleId = new();
-            foreach (var userRole in userRoles)
-            {
-                roleId.Add(userRole.RolesId);
-            }
-            return roleId;
+            return viewRoleUsers.Select(i => i.UserId).ToList();
         }
     }
 }

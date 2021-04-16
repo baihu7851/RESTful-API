@@ -16,64 +16,63 @@ namespace RESTfulAPI.ApiController.Controllers
             _role = role;
         }
 
-        // GET: api/Role/All
+        /// <summary>
+        /// 角色列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("All")]
-        public ActionResult<ViewRole> GetAll()
+        public ActionResult GetAll()
         {
             var result = _role.GetRoles();
-            if (result == null)
-            {
-                return Ok(null);
-            }
-            return Ok(_role);
-        }
-
-        // GET api/Role/5
-        [HttpGet("{id}")]
-        public ActionResult<ViewRole> Get(int id)
-        {
-            var result = _role.GetRole(id);
-            if (result == null)
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
-        // POST api/Role/Add
+        /// <summary>
+        /// 角色資訊
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public ActionResult Get(int id)
+        {
+            var result = _role.GetRole(id);
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        /// <summary>
+        /// 新增角色
+        /// </summary>
+        /// <param name="roles"></param>
+        /// <returns></returns>
         [HttpPost("Add")]
-        public ActionResult<ViewRole> Post(List<ViewRole> roles)
+        public ActionResult Post(List<ViewRole> roles)
         {
             var result = _role.AddRole(roles);
-            if (result == null)
-            {
-                return BadRequest("新增失敗");
-            }
             return CreatedAtAction(nameof(Post), result);
         }
 
-        // PUT api/Role/Update
+        /// <summary>
+        /// 更新角色資料
+        /// </summary>
+        /// <param name="roles"></param>
+        /// <returns></returns>
         [HttpPut("Update")]
-        public ActionResult<ViewRole> Put(List<ViewRole> roles)
+        public ActionResult Put(List<ViewRole> roles)
         {
-            var result = _role.UpdateRole(roles);
-            if (result == null)
-            {
-                return BadRequest("更新失敗");
-            }
-            return Ok(result);
+            List<ViewRole> result = _role.UpdateRole(roles);
+            return result == null ? NotFound() : Ok(result);
         }
 
-        // DELETE api/Role/Delete
+        /// <summary>
+        /// 刪除角色
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("Delete")]
-        public ActionResult<ViewRole> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var result = _role.DeleteRole(id);
-            if (result == null)
-            {
-                return BadRequest("刪除失敗");
-            }
-            return Ok(result);
+            return result == null ? NotFound() : Ok(result);
         }
     }
 }

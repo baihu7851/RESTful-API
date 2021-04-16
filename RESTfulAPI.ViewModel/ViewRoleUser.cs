@@ -6,6 +6,6 @@ namespace RESTfulAPI.ViewModel
     public class ViewRoleUser
     {
         public int RoleId { get; set; }
-        public List<int> UserId { get; set; }
+        public int UserId { get; set; }
     }
 }

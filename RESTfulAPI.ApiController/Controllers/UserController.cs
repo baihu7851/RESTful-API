@@ -16,7 +16,10 @@ namespace RESTfulAPI.ApiController.Controllers
             _user = user;
         }
 
-        // GET: api/User/All
+        /// <summary>
+        /// 使用者列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("All", Name = nameof(GetAll))]
         public ActionResult GetAll()
         {
@@ -24,7 +27,11 @@ namespace RESTfulAPI.ApiController.Controllers
             return Ok(result);
         }
 
-        // GET api/User/5
+        /// <summary>
+        /// 使用者資訊
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = nameof(Get))]
         public ActionResult Get(int id)
         {
@@ -32,15 +39,23 @@ namespace RESTfulAPI.ApiController.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
-        // POST api/User/Add
+        /// <summary>
+        /// 新增使用者
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [HttpPost("Add", Name = nameof(Post))]
-        public ActionResult<ViewUser> Post(List<ViewUser> user)
+        public ActionResult Post(List<ViewUser> users)
         {
-            var result = _user.AddUser(user);
+            var result = _user.AddUser(users);
             return CreatedAtAction(nameof(Post), result);
         }
 
-        // PUT api/User/Update
+        /// <summary>
+        /// 更新使用者資料
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPut("Update", Name = nameof(Put))]
         public ActionResult Put(List<ViewUser> user)
         {
@@ -48,9 +63,13 @@ namespace RESTfulAPI.ApiController.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
-        // DELETE api/User/Delete
+        /// <summary>
+        /// 刪除使用者
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("Delete/{id}", Name = nameof(Delete))]
-        public ActionResult<ViewUser> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var result = _user.DeleteUser(id);
             return result == null ? NotFound() : Ok(result);
